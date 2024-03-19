@@ -1,7 +1,8 @@
-import {useState} from 'react';
-
+import {useState, useEffect} from 'react';
+import ProgressBar from './ProgressBar.jsx';
 import QUESTIONS from '../questions.js';
 import quizCompleteImg from '../assets/quiz-complete.png';
+const TIMER = 3000;
 
 export default function Quiz(){
     
@@ -9,6 +10,23 @@ export default function Quiz(){
     const activeQuestionIndex = userAnswers.length;
     
     const quizIsComplete = activeQuestionIndex === QUESTIONS.length;
+
+    
+
+    useEffect(() => {
+
+        if (!quizIsComplete){
+
+        
+            const timer = setTimeout(() =>{
+                handleSelectAnswer('timeout');
+            },TIMER);
+
+            return () => {
+                clearTimeout(timer);
+            }
+        }
+    },[activeQuestionIndex, quizIsComplete])
 
     if (quizIsComplete){
         return (<div id="summary">
@@ -31,6 +49,7 @@ export default function Quiz(){
         <div id='quiz'>
             <div id="question">
                 <h2>{QUESTIONS[activeQuestionIndex].text}</h2>
+                <ProgressBar timer={TIMER} key={activeQuestionIndex}/>
                 <ul id="answers">
                     {shuffledAnswers.map((answer)=>(
                         <li key={answer} className="answer">
