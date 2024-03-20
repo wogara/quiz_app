@@ -53,10 +53,23 @@ export default function Quiz(){
         },1000)
     },[activeQuestionIndex])
 
+    function findNumCorrect(){
+        let count = 0;
+        for (let i = 0; i < userAnswers.length; i++){
+            if (userAnswers[i] === QUESTIONS[i].answers[0]){
+                count = count + 1;
+            }
+        }
+        return count;
+    }
+
     if (quizIsComplete){
+
+        let numCorrect = findNumCorrect();
         return (<div id="summary">
             <img src={quizCompleteImg}/>
             <h2>Quiz Completed!</h2>
+            <h2>You scored {numCorrect}/7</h2>
         </div>
         );
     }
